@@ -1,0 +1,276 @@
+---
+title: "Demonstration of tidyext"
+author: "Michel Clark"
+date: <span style="font-style:normal;font-family:'Open Sans'">`r Sys.Date()`</span>
+output:
+  html_vignette:
+    toc: true
+    toc_depth: 3
+    df_print: kable
+
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Demonstration of tidyext}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, collapse = TRUE,
+                      comment=NA, R.options=list(width=220),   # code 
+                      dev.args=list(bg = 'transparent'), dev='svglite',                                 # viz
+                      fig.align='center', out.width='75%', fig.asp=.75,                 
+                      cache.rebuild=F, cache=F)                                                         # cache
+```
+
+
+# Getting started with tidyext
+
+## Data Summaries
+
+To begin, we can load up the <span class="pack">tidyverse</span> and this package. I'll also create some data that will be useful for demonstration.
+
+```{r packages}
+library(tidyverse); library(tidyext)
+set.seed(8675309)
+df1 <- tibble(
+  g1 = factor(sample(1:2, 50, replace = TRUE), labels=c('a','b')),
+  g2 = sample(1:4, 50, replace = TRUE),
+  a = rnorm(50),
+  b = rpois(50, 10),
+  c = sample(letters, 50, replace=TRUE),
+  d = sample(c(T,F), 50, replace=TRUE)
+)
+
+df_miss = df1
+df_miss[sample(1:nrow(df1), 10), sample(1:ncol(df1), 3)] = NA
+```
+
+We can start by getting a quick numerical summary for a single column.  As the name suggests, this will only work with numeric data.
+
+```{r num_summary}
+num_summary(mtcars$mpg)
+
+num_summary(df_miss$a, extra = T)
+```
+
+
+
+Note that the result's class is a <span class="objclass">data.frame</span>, which makes it easy to work with.
+
+```{r class_num_sum}
+x = num_summary(mtcars$mpg)
+glimpse(x)
+
+mtcars %>% 
+  map_dfr(num_summary, .id = 'Variable')
+```
+
+There are also functions for summarizing missingness.
+
+```{r missing}
+sum_NA(df_miss$a)
+
+sum_blank(c(letters, '', '   '))
+
+sum_NaN(c(1, NaN, 2))
+```
+
+
+When dealing with a data frame of mixed types we can use the <span class="func">describe_*</span> functions.  
+
+```{r describe}
+describe_all(df1)
+
+describe_all_cat(df1)
+
+describe_all_num(df1, digits = 1)
+```
+
+
+Note how the categorical data result is just as ready for visualization as the numeric, as it can be filtered by the `Variable` column.  It also has an option to deal with <span class="objclass">NA</span> and some other stuff.
+
+```{r describe_cat, out.width='50%'}
+describe_all_cat(df_miss, include_NAcat = TRUE, sort_by_freq = TRUE) %>% 
+  filter(Variable == 'g1') %>% 
+  ggplot(aes(x=Group, y=`%`)) +
+  geom_col(width = .25)
+```
+
+
+Typically during data processing, we are performing grouped operations.  As such there is a corresponding <span class="func">num_by</span> and <span class="func">cat_by</span> to provide the same information by some grouping variable.  This basically is saving you from doing `group_by %>% summarize()` and creating variables for all these values.  It can also take a set of variables to summarize using <span class="func">vars</span>.
+
+```{r num_by}
+df_miss %>% 
+  num_by(a, group_var = g2)
+
+df_miss %>% 
+  num_by(vars(a, b), group_var = g2)
+```
+
+For categorical variables summarized by group, you can select whether the resulting percentage is irrespective of the grouping.
+
+```{r cat_by}
+df1 %>% 
+  cat_by(d, 
+         group_var = g1, 
+         perc_by_group = TRUE)
+
+df1 %>% 
+  cat_by(d, 
+         group_var = g1, 
+         perc_by_group = FALSE, 
+         sort_by_group = FALSE)
+```
+
+
+
+## Data Processing
+
+In addition there are some functions for data processing.  We can start with the simple one-hot encoding function.
+
+```{r onehot}
+onehot(iris) %>% 
+  slice(c(1:2, 51:52, 101:102))
+```
+
+It can do it sparsely.
+
+```{r onehot2}
+iris %>% 
+  slice(c(1:2, 51:52, 101:102)) %>% 
+  onehot(sparse = TRUE)
+```
+
+Choose a specific variable, whether you want to keep the others, and how to deal with NA.
+
+```{r onehot3}
+df_miss %>%
+  onehot(var = c('g1', 'g2'), nas = 'na.omit', keep.original = FALSE) %>%
+  head()
+```
+
+
+With <span class="func">create_prediction_data</span>, we can quickly create data for use with <span class="func">predict</span> after a model.  By default it will put numeric variables at their mean, and categorical variables at their most common category.
+
+```{r create_prediction_data}
+tidyext::create_prediction_data(iris)
+
+tidyext::create_prediction_data(iris, num = function(x) quantile(x, p=.25))
+```
+
+We can also supply specific values.
+
+
+```{r create_prediction_data2}
+cd = data.frame(cyl=4, hp=100)
+create_prediction_data(mtcars, conditional_data = cd)
+```
+
+For modeling purposes, we often want to center or scale the data, take logs etc.  The <span class="func">pre_process</span> function will standardize numeric data by default.
+
+```{r preprocess}
+pre_process(df1)
+```
+
+Other options are to simply center the data (`scale_by = 0`), start some variables at zero (e.g. time indicators), log some variables (with chosen base), and scale some to range from zero to one.  
+
+```{r preprocess2}
+pre_process(mtcars, 
+            scale_by = 0, 
+            log_vars = vars(mpg, wt), 
+            zero_start = vars(cyl), 
+            zero_one = vars(hp, starts_with('d'))) %>% 
+  describe_all_num()
+```
+
+Note that center/standardizing is done to any numeric variables *not* chosen for `log`, `zero_start`, and `zero_one`.  
+
+Here's a specific function you will probably never need, but will be glad to have if you do.  Some data columns have multiple entries for each observation/cell.  While it's understandable why someone would do this, it's not very good practice. This will split out the entries, or any particular combination of them, into their own indicator column.
+
+```{r combn, message=TRUE}
+d = data.frame(id = 1:4,
+               labs = c('A-B', 'B-C-D-E', 'A-E', 'D-E'))
+combn_2_col(data=d, var='labs', max_m=2, sep = '-', collapse = ':', toInteger = T)
+
+combn_2_col(data=d, var='labs', max_m=2, sparse = T)
+```
+
+In addition, there is a function that makes <span class="pack">tidyr's</span> <span class="func">spread</span> work like it should when you don't have unique identifiers.  I spent a lot of time coming up with the name for this one.
+
+```{r spread2, error=TRUE}
+# initial example from spread
+stocks_init <- data.frame(
+  time = as.Date('2009-01-01') + 0:9,
+  X = rnorm(10, 0, 1),
+  Y = rnorm(10, 0, 2),
+  Z = rnorm(10, 0, 4)
+)
+
+# a very common situation
+stocks <- data.frame(
+  X = rnorm(10, 0, 1),
+  Y = rnorm(10, 0, 2),
+  Z = rnorm(10, 0, 4)
+)
+
+
+stocksm_init <- stocks_init %>% 
+  gather(stock, price, -time)
+head(stocksm_init)
+
+stocksm_init %>% 
+  spread(stock, price)  %>% 
+  head()                                 # works fine
+
+# no time
+stocksm <- stocks %>% 
+  gather(stock, price)
+head(stocksm)
+
+stocksm %>% 
+  spread(stock, price)         # annoying
+
+stocksm %>% 
+  spread2(stock, price)        # works fine
+```
+
+However, with unbalanced data the result can be interpreted in different ways, so you'll have a choice to make.  
+
+```{r spread2compact}
+stocksm$price[sample(1:nrow(stocksm), 5)] = NA
+stocksm %>% 
+  spread2(stock, price)
+
+stocksm %>% 
+  spread2(stock, price, compact = FALSE)
+```
+
+I can speak from experience that having longitudinal data in the `compact = FALSE` format is about the worst way you could keep such data.
+
+Use <span class="func">gather_multi</span> to extend `tidyr::gather` to deal with multiple sets of variables.
+
+```{r gather_multi}
+demo_data_wide = data.frame(id = 1:10,
+                            X = matrix(rnorm(40), ncol = 4),
+                            Y = matrix(sample(0:1, 40, replace = T), ncol = 4),
+                            Z = matrix(rpois(40, 5), ncol = 4))
+head(demo_data_wide)
+
+gather_multi(demo_data_wide,
+             key = wave,
+             values  = vars(X, Y, Z),
+             varlist = vars(starts_with('X'),
+                            starts_with('Y'),
+                            starts_with('Z')),
+             -id)
+```
+
+Note that this only makes sense with balanced data, though it will work if NAs are present.  Also, you may want to change the key in some fashion.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

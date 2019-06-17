@@ -1,0 +1,97 @@
+title: visibly!
+title-img: logo.png
+
+authors:
+  Michael Clark:
+    href: https://m-clark.github.io
+    html: <img src="man/figures/mc_logo.png" width=10% style='display:inline'/>
+
+template:
+  params:
+    highlight: pygments
+    #bootswatch: sandstone
+    templates_path: inst/pkgdown
+
+highlight: pygments
+
+
+home:
+  #strip_header: true
+  links:
+  - text: Docs on Stats, R, and more
+    href: http://m-clark.github.io
+
+reference:
+  - title: "Dealing with color"
+    desc: >
+      Functions for getting and creating palettes.
+    contents:
+      - create_palette
+      - palettes
+      - colorgorical
+      - col2hex
+      - col2lab
+      - color_contrast_checker
+
+  - title: "Themes"
+    desc: >
+      Clean themes.
+    contents:
+      - theme_trueMinimal
+      - theme_plotly
+      - theme_blank
+
+  - title: "Descriptive Visualization"
+    desc: >
+      Plotting correlations.
+    contents:
+      - corr_heat
+
+  - title: "Plotting model results"
+    desc: >
+      Functions for plotting fixed and random effect coefficients and more.
+    contents:
+      - plot_coefficients
+      - plot_coefficients.brmsfit
+      - plot_coefficients.lm
+      - plot_coefficients.merMod
+      - plot_gam
+      - plot_gam_check
+      - plot_gam_2d
+      - plot_gam_3d
+      - plot_gam_by
+
+figures:
+  dev: png
+  dpi: 96
+  dev.args: []
+  fig.ext: png
+  fig.width: 7.2916667
+  fig.height: ~
+  fig.retina: 2
+  fig.asp: 1.618
+
+navbar:
+  title: "whatever bc pkgdown will ignore it"
+  type: ~
+  left:
+    - text: "Reference"
+      href: "reference/index.html"
+    - text: "News"
+      href: "news/index.html"
+    - text: Articles
+      menu:
+      - text: Introduction to visibly
+        href: articles/intro.html
+      - text: Palettes & Themes
+        href: articles/intro.html##palettes-themes
+      - text: Descriptive visualization
+        href: articles/intro.html#descriptive-visualization
+      - text: Plot Models
+        href: articles/intro.html#plotting-model-results
+  right:
+    - icon: fa-github-alt
+      href: https://github.com/m-clark
+    - icon: fa-empire
+      href: https://m-clark.github.io
+

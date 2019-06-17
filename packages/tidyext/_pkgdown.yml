@@ -1,0 +1,78 @@
+title: tidyext!
+title-img: logo.png
+
+authors:
+  Michael Clark:
+    href: https://m-clark.github.io
+    html: Michael Clark <img src="man/figures/lh_hex.png" height="24" />
+
+template:
+  params:
+    highlight: pygments
+    #bootswatch: sandstone
+    templates_path: inst/pkgdown
+
+highlight: pygments
+
+
+home:
+  links:
+  - text: Docs on Stats, R, and more
+    href: http://m-clark.github.io
+
+reference:
+  - title: "Data summary"
+    desc: >
+      Functions for summarizing data.
+    contents:
+      - num_by
+      - cat_by
+      - describe_all
+      - describe_all_num
+      - describe_all_cat
+      - num_summary
+      - sum_NA
+  - title: "Creating data"
+    desc: >
+      Functions for creating data.
+    contents:
+      - combn_2_col
+      - create_prediction_data
+      - gather_multi
+      - onehot
+      - pre_process
+      - spread2
+  - title: "Miscellaneous"
+    desc: >
+      Miscellaneous functions.
+    contents:
+      - select_not
+      - tidyext
+figures:
+  dev: svglite::svglite
+  dpi: 96
+  dev.args: []
+  fig.ext: svg
+  fig.width: 7.2916667
+  fig.height: ~
+  fig.retina: 2
+  fig.asp: 1.618
+
+navbar:
+  title: "whatever bc pkgdown will ignore it"
+  type: ~
+  left:
+    - text: "Reference"
+      href: "reference/index.html"
+    - text: "News"
+      href: "news/index.html"
+    - text: Articles
+      menu:
+      - text: Introduction to tidyext
+        href: articles/introduction.html
+  right:
+    - icon: fa-github-alt
+      href: https://github.com/m-clark
+    - icon: fa-empire
+      href: https://m-clark.github.io
+

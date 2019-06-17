@@ -1,0 +1,109 @@
+# lazerhawk <img src="man/img/lh_hex.png" align="right" width = 360/>
+
+[![Build
+Status](https://travis-ci.org/m-clark/lazerhawk.svg?branch=master)](https://travis-ci.org/m-clark/lazerhawk)
+[![codecov](https://codecov.io/gh/m-clark/lazerhawk/branch/master/graph/badge.svg)](https://codecov.io/gh/m-clark/lazerhawk)
+<a href="https://github.com/m-clark/lazerhawk" alt="Miscellaneous Shenanigans">
+<img src="https://img.shields.io/badge/miscellaneous_shenanigans-constant-ff5500.svg?colorA=00aaff&longCache=true&style=for-the-badge"  width=27.5%/></a>
+
+<!-- [](https://img.shields.io/badge/misc_shenanigans-constant-ff5500.svg) -->
+
+<!-- https://github.com/badges/shields -->
+
+<!-- <img src="man/img/lh_hex.png" style="display:block; margin: 0 auto;" width='50%'> -->
+
+## Package description
+
+This package has a few miscellaneous functions useful to me, and which
+might be useful to others. It will be added to over time, and likely
+will have functions from all over the place as far as utility is
+concerned. Nothing extraordinarily unique is here at present, more or
+less tweaks/variations of available R functions that do almost what I
+want, but not quite. Also, I wanted to learn more about building
+packages, and this was my first foray into that world. The package
+itself is not on CRAN but would pass CRAN checks. Feel free to note
+issues if you use it.
+
+It is currently undergoing quite a bit of change and many functions are
+deprecated, as they have been moved to
+[tidyext](https://github.com/m-clark/tidyext) and
+[visibly](https://github.com/m-clark/visibly). This package will be more
+of a grab-bag of odds and ends that don’t seem to fit elsewhere.
+
+I was listening to
+[Lazerhawk](http://lazerhawk.bandcamp.com/album/redline) at one point
+while creating it, hence the name, and which I can suggest is decent to
+listen to for programming, but to each their own in that regard.
+
+## Installation
+
+The usual GitHub installation. **devtools** package required.
+
+``` r
+devtools::install_github('m-clark/lazerhawk')
+```
+
+## Functions
+
+### brmsSummaryTable
+
+A function I use when creating reports for other people that involve
+models using the [brms](https://github.com/paul-buerkner/brms) package.
+
+### create\_adjacency, create\_edges
+
+Create an adjacency matrix, or use one to create an edge list.
+
+### create\_corr
+
+A function to create a correlation matrix. Useful, for example, in
+setting up simulations.
+
+### extract\_nlme\_variances
+
+A very specific function for extracting heterogenous variances from nlme
+output.
+
+### lower\_tri, upper\_tri
+
+Return a triangular matrix, with some options on what specifically is
+returned.
+
+### pairwise
+
+Apply an arbitrary function to pairwise combinations of rows or columns.
+
+### update\_github\_pkgs
+
+Guess.
+
+## Addins
+
+### insertImgCenterAddin
+
+For R Markdown files, inserts `<img ...>` with centered options filled
+in.
+
+### insertSpanAddin
+
+For R Markdown files, inserts `<span class=''>`.
+
+## Release Notes
+
+  - 0.2.4 Split off more tidy-oriented functions to tidyext package, add
+    update\_github\_pkgs
+  - 0.2.3 Added some options and streamlined describe\_all functions
+    (e.g. issue \#10)
+  - 0.2.2 Add colorgorical, convert names to snake case
+  - 0.2.1 Add create\_prediction\_data
+  - 0.2.0 Add combn\_2\_col, onehot, and extract\_nlme\_variances
+  - 0.1.9 Extend num\_by and rewrite describeAll
+  - 0.1.8 Added num\_by summary function and fixed issue \#3
+  - 0.1.7 Added create\_palette and made updates to palettes
+  - 0.1.6 Removed corrheat to its own package, added sum of missingness
+  - 0.1.5 Added plotly theme, modified help
+  - 0.1.4 Updates to corrheat to use psych package
+  - 0.1.3 Addins for span, slide
+  - 0.1.2 Added clean themes for ggvis and ggplot
+  - 0.1.1 Added createAdjacency and createEdges, and start of addins
+  - 0.1.0 Initial release

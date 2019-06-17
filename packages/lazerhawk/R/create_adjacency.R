@@ -1,0 +1,86 @@
+#' Create an adjacency matrix, or convert one to an edgelist
+#' @description Creates a symmetric adjacency matrix from a simple data frame or
+#'   edgelist from a matrix object that notes the connections.
+#'
+#' @param data A data frame containing the nodes.
+#' @param n1 column representing the first set of nodes.
+#' @param n2 column representing the second set of nodes.
+#' @param value column representing the weight (otherwise will be set to 1).
+#' @param diagonal numeric value desired for the diagonal (defaults to a value of 1).
+#'
+#' @details The idea is to have this functionality without requiring any special
+#'   graph or network object, as typical graphs can be represented rather simply
+#'   using a data frame. n1 and n2 specify columns where the nodes in n1 are
+#'   connected to nodes in n2. Value is an optional column name that will
+#'   specify the weight of the connection See get.adjacency in igraph for an
+#'   alternative.
+#'
+#'   \code{create_edges} assumes an adjacency matrix like that produced by \code{create_adjacency}
+
+#' @return A symmetric adjacency matrix with rows and columns pertaining to the
+#'   unique values found in n1 and n2
+#'
+#' @examples
+#' library(lazerhawk); library(dplyr)
+#' nodeData = data.frame(pair=1:10,
+#' node1 = sample(letters[1:4], 10, replace=TRUE),
+#'                       node2 = sample(LETTERS[1:4], 10, replace=TRUE),
+#'                       weight = runif(10),
+#'                       diagonal = 0)
+#' adjmat = create_adjacency(nodeData, n1='node1', n2='node2')
+#' adjmat
+#' adjmat = create_adjacency(nodeData, n1='node1', n2='node2', value='weight', diagonal=0)
+#' adjmat
+#'
+#' create_edges(adjmat)
+#' create_edges(adjmat, symmetric=TRUE)
+
+
+#' @export
+create_adjacency <- function(data, n1, n2, value=NULL, diagonal=NULL) {
+  assertthat::assert_that(is.data.frame(data))
+  nams = unique(c(as.character(data[,n1]), as.character(data[,n2])))
+  didx = dplyr::mutate_all(data[,c(n1,n2)], as.character)
+
+  adjmat = diag(1, length(nams))
+  rownames(adjmat) = colnames(adjmat) = nams
+
+  for (i in 1:nrow(data)){
+    r = as.matrix(didx[i,])
+    adjmat[r, rev(r)] = ifelse(is.null(value), 1, data[, value][i])
+  }
+
+  if (!is.null(diagonal)) diag(adjmat) = diagonal
+  if (is.numeric(adjmat)) {
+    adjmat
+  }
+  else {
+    adjmat = apply(adjmat, 2, as.numeric)
+    rownames(adjmat) = colnames(adjmat)
+    adjmat
+  }
+}
+
+#' @rdname create_adjacency
+#'
+#' @param adjmat A matrix like that produced with \code{create_adjacency}
+#' @param zeroEdges Include all possible edges or only those with values > 0?
+#' @param symmetric Include both A -> B and B -> A? FALSE assumes an undirected graph.
+#' @param diag Include diagonal (i.e. self connections)?
+#'
+#' @export
+create_edges <- function(adjmat, zeroEdges=FALSE, symmetric=FALSE, diag=FALSE){
+  assertthat::assert_that(!is.null(colnames(adjmat)))
+  if(!symmetric & !diag) adjmat = lower_tri(adjmat)
+  if(symmetric & !diag) diag(adjmat) = 0
+  if(!symmetric & diag) adjmat = lower_tri(adjmat, diag=TRUE)
+
+  edgeMat = tidyr::gather(dplyr::bind_cols(id=colnames(adjmat), dplyr::as_tibble(adjmat)), target, value, -id)
+  edgeMat = dplyr::rename(edgeMat, source=id)
+
+  if(zeroEdges){
+    edgeMat
+  } else{
+    edgeMat[edgeMat$value != 0, ]
+  }
+}

@@ -1,0 +1,52 @@
+Package: visibly
+Type: Package
+Title: Functions and palettes related to visual enhancement
+Version: 0.2.6
+Authors@R: person("Michael", "Clark", role = c("aut", "cre"), email = "micl@umich.edu")
+Maintainer: Michael Clark <micl@umich.edu>
+Description: Tools for visual enhancement, including palettes, themes, visualization of data and model results, etc.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/m-clark/visibly
+BugReports: https://github.com/m-clark/visibly/issues
+Year: 2018
+Depends:
+  R (>= 3.5.0)
+Imports:
+  dplyr,
+  magrittr,
+  purrr,
+  rlang,
+  ggplot2,
+  tibble,
+Suggests:
+  brms,
+  broom, 
+  colorspace,
+  colortools,
+  covr,
+  glue,
+  GPArotation,
+  grDevices,
+  gridExtra,
+  httr,
+  jsonlite,
+  knitr,
+  lme4,
+  mgcv,
+  patchwork,
+  plotly,
+  psych,
+  rmarkdown,
+  scales,
+  scico,
+  svglite,
+  testthat,
+  tidyext,
+  tidyr,
+Remotes:
+  m-clark/tidyext,
+  thomasp85/patchwork
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr

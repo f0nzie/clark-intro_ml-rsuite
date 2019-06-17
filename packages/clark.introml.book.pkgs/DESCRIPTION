@@ -7,4 +7,29 @@ Author: msfz751
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
-Imports: logging
+Imports: logging,
+  tidyext,
+  visibly,
+  caret, 
+  DT, 
+  viridis, 
+  kableExtra, 
+  broom, 
+  pander, 
+  tidyverse, 
+  htmltools,
+  mgcv,
+  dplyr,
+  doParallel,
+  ggRandomForests,
+  lime,
+  DiagrammeR,
+  ggnetwork,
+  randomForestExplainer,
+  scico,
+  plotly,
+  heatR,
+  tibble,
+  lazerhawk,
+  GGally
+RoxygenNote: 6.1.1
