@@ -1,0 +1,49 @@
+---
+title: Machine Learning
+author:  |
+  <span class="noem">Michael Clark</span> 
+  https://m-clark.github.io/
+  <img class='arc' src="img/signature-acronym.png" alt="University of Michigan: CSCAR">
+  <img class='cscar' src="img/ARC-acronym-signature.png" alt="University of Michigan: Advanced Research Computing"> 
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: 
+    bookdown::gitbook
+always_allow_html: yes
+documentclass: book
+bibliography: MLtechrep.bib
+biblio-style: apalike
+link-citations: yes
+description: "This document provides an introduction to machine learning for applied researchers.  While conceptual in nature, demonstrations are provided for several common machine learning approaches of a supervised nature. In addition, all the R examples, which utilize the caret package, are also provided in Python via scikit-learn."
+cover-image: 'img/nineteeneightyR.png'
+url: 'https\://m-clark.github.io/introduction-to-machine-learning/'  # evidently the \: is required or you'll get text in the title/toc area
+github-repo:  'm-clark/introduction-to-machine-learning/'
+nocite: | 
+  @wood_generalized_2006, @hastie_generalized_1990, @ruppert_semiparametric_2003, 
+  @fahrmeir2013regression, @efron2016computer, @kuhn2013
+
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=NA, R.options=list(width=220),   # code 
+                      dev.args=list(bg = 'transparent'), dev='svg', fig.align='center',                 # viz
+                      cache.rebuild=F, cache=T)                                                         # cache
+knitr::knit_engines$set(python = reticulate::eng_python)
+```
+
+```{r load_common_packages, echo=FALSE, cache=FALSE, eval=TRUE}
+library(tidyext); library(visibly); library(caret); library(DT); library(viridis); library(kableExtra)
+library(broom); library(pander); library(tidyverse); library(htmltools)
+```
+
+# 
+```{r includegraph, fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html'), out.width='35%'}
+knitr::include_graphics('img/198R.png', dpi = NA)
+```
+
+
+```{r logo, fig.align='center', out.width=0, fig.show='hide', echo=FALSE}
+knitr::include_graphics('img/mc_logo.png', dpi = NA)
+```
