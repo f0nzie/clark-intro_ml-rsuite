@@ -2,12 +2,12 @@
 
 export(clark.introml.book.pkgs_getLogger)
 import(logging)
+import(viridis)
 
 import(tidyext)
 import(visibly)
 import(caret)
 import(DT)
-import(viridis)
 import(kableExtra)
 import(broom)
 import(pander)
