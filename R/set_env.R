@@ -82,6 +82,9 @@ folder_exists <- function(folder) {
   return(folder)
 }
 
+
+library(clark.introml.book.pkgs)
+
 project_root <- rprojroot::find_rstudio_root_file()
 book_src_dir <- file.path(project_root, "work", "book")
 book_out_dir <- file.path(project_root, "export", "book_out")
