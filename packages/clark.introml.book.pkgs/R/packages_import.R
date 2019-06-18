@@ -6,4 +6,8 @@
 
 #' @import logging
 #' @import viridis
+#' @import visibly
+#' @import dplyr
+#' @import tidyr
+#' @import tibble
 NULL
