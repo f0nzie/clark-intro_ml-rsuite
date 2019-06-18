@@ -1,5 +1,18 @@
 # Opening the Black Box
 
+```{r}
+library(clark.introml.book.pkgs)
+library(visibly)
+library(dplyr)
+library(kableExtra)
+library(tidyr)
+library(tibble)
+library(htmltools)
+library(tidyext)
+library(tidyverse)
+```
+
+
 <span class="newthought">It's now time to see some machine learning in action</span>. In what follows, a variety of techniques will be used on the same problem to provide a better feel for the sorts of tools that are available.
 
 ## Process Overview
@@ -103,10 +116,11 @@ tex2markdown = function(texstring) {
 
 
 ```{r confusionMatrix, echo=FALSE}
-t1 = data_frame(` ` = c('Predicted = 1','Predicted = 0'),
+
+t1 = tibble::tibble(` ` = c('Predicted = 1','Predicted = 0'),
            `Actual = 1` = c(41, 16),
            `Actual = 0` = c(21, 13))
-t2 = data_frame(` ` = c('Predicted = 1','Predicted = 0'),
+t2 = tibble::tibble(` ` = c('Predicted = 1','Predicted = 0'),
            `Actual = 1` = c('A', 'C'),
            `Actual = 0` = c('B', 'D'))
 
@@ -896,7 +910,7 @@ md_plot$layers[[2]]$aes_params$alpha =  .05
 md_plot$layers[[2]]$geom_params$width =  0    # it adds no info so drop
 md_plot +
   viridis::scale_fill_viridis(begin=.8, end = 0, option = 'plasma', alpha=.75, discrete = T) +
-  theme_trueMinimal() +
+  visibly::theme_trueMinimal() +
   theme(panel.border = element_blank(),
         title = element_text(color='gray25'))
 
@@ -917,18 +931,21 @@ md_plot_inter$layers[[3]]$aes_params$size =  1
 md_plot_inter2 = md_plot_inter
 md_plot_inter2$layers[[3]] = md_plot_inter$layers[[1]]
 md_plot_inter2$layers[[1]] = md_plot_inter$layers[[3]]
-# md_plot_inter2 +
-#   labs(y='Mean Minimal Depth', x = 'Interaction') +
-#   viridis::scale_fill_viridis(end = .75, option = 'plasma', alpha=.5) +  # alpha suddenly does nothing (see previous)
-#   theme_trueMinimal() +
-#   theme(panel.border = element_blank(),
-#         title = element_text(color='gray25'))
+# md_plot_inter2 #+
+  # labs(y='Mean Minimal Depth', x = 'Interaction') #+
+  # viridis::scale_fill_viridis(end = .75, option = 'plasma', alpha=.5)  #+  # alpha suddenly does nothing (see previous)
+# theme_trueMinimal() # +
+# theme(panel.border = element_blank(), 
+#       title = element_text(color='gray25'))
 ```
 
 
 We can see at least one difference relative to the previous VIMP measures.  It appears that other measures' importance are due more to their interaction with alcohol.  Here is an interactive plot of the alcohol-volatile acidity interaction, which had the minimal depth.  High alcohol and low acidity are very likely to be rated 'good', and vice versa.
 
+
 ```{r plot_interaction, echo=FALSE}
+library(lazerhawk)
+
 # someone forgot that a formula approach is not required for rf; plot is hideous anyway.
 # plot_predict_interaction(results_rf$finalModel, data.frame(wine_train), "alcohol", "volatile.acidity")
 d = data.frame(
@@ -940,9 +957,11 @@ d = data.frame(
                          length.out = 100)
 ) 
 
+
 pred_dat = create_prediction_data(model_data = scale(results_rf$trainingData[,-1]) %>%
                                     data.frame(), 
                                   conditional_data = scale(expand.grid(d)))
+
 
 zmat = randomForest:::predict.randomForest(results_rf$finalModel, newdata=pred_dat, type = 'prob')[,'Good'] %>% 
   matrix(100, 100, byrow = T)
