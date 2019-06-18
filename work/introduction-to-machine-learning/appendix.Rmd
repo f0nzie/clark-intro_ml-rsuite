@@ -175,7 +175,7 @@ One can start with the <span class="pack">scikit-learn</span> module, using it m
 
 <!-- Though no change was made to the code, nor any need to re-evaluate what was alrady displayed, something caused knitr to do so and empty lines are now ignored; separate chunks until fixed -->
 
-```{python pyrf, engine.path= '/Users/micl/anaconda3/bin/python',  eval=T, cache=TRUE}
+```{python pyrf, engine.path= '~/anaconda3/bin/python',  eval=T, cache=TRUE}
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
