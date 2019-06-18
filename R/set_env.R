@@ -94,4 +94,4 @@ data_out_dir <- folder_exists(file.path(project_root, "export"))
 assets_dir   <- file.path(project_root, "import", "assets")
 r_code_dir   <- file.path(project_root, "R")
 
-save.image(file.path(project_root, "workspace.RData"))
+# save.image(file.path(project_root, "workspace.RData"))
