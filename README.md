@@ -50,7 +50,7 @@ Because `rsuite` allows a supervising project on top of other projects or packag
 1. the names of all the packages that satisfy the dependencies for the book to work; 
 1. define a place for the source code of the package if the package is not in CRAN; 
 1. a master project and a master package that takes care of reproducing the whole book, again and again, even after changing the operating system.
-1. a cntrolling environment with its own scripts and configuration files.
+1. a master environment with its own scripts and configuration files on top of projects and packages.
 
 ## How to reproduce this ebook yourself
 * Download and install the **RSuite** client. Available for Linux, Mac and Windows.
