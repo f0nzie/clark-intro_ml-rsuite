@@ -37,5 +37,9 @@ Imports: logging,
   tibble,
   lazerhawk,
   GGally,
-  GPArotation
+  GPArotation,
+  reticulate,
+  psych,
+  e1071,
+  svglite
 RoxygenNote: 6.1.1
