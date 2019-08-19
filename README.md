@@ -1,7 +1,7 @@
 # clark-intro-ml-rsuite
 
 ## ebook built with rsuite. How is this different
-This ebook was created with bookdown. It is different in the way it has been built, and can be rebuilt.
+This ebook was created with `bookdown`. It is different in the way it has been built, and can be rebuilt.
 
 I have used `rsuite` to make it fully reproducible. This ebook is, in some way, difficult to match all the dependencies. 
 Unfortunately, not all good things last forever. After a package upgrade the ebook may stop building. These are all the packages required to build this ebook:
@@ -40,7 +40,7 @@ logging,
   GPArotation
 ```  
 
-
+## Methods
 So, what I did is creating an isolated environment for the book, one where all the packages are spelled out in advance so the ebook can be rebuilt after: (i) an R re-installation, (ii) a new R version, or (iii) a full package upgrade. The book will be able to be regenerated to the CRAN snapshot at the time it was first built.
 
 Because `rsuite` allows a supervising project on top of other projects or packages, you can control:
